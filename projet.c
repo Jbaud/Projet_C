@@ -36,7 +36,7 @@ int main(int argc , char *argv[]){
 	int i,j,test;
 
 	//  On récpère les options fornies si présentes
-	if (argc==6)
+	if (argc==7)
 	{
 		sizeX=(int)argv[0];
 		sizeY=(int)argv[1];
@@ -49,37 +49,32 @@ int main(int argc , char *argv[]){
 		// Dans ce cas nous devons generer le tableau aléatoirement.
 	}
 	else{
-
-		if (argc!=0 && argc!=6){
-			printf("Entrees mal formatées\n");
-		}
 		/*
 		   Si aucun argument n'est fourni en entree -> fichier texte.
 		 */
-		if(argc==0){
-			/*	
-				printf("Veuillez rentrer le nom du fichier sorurce à ouvrir\n");
-				scanf(%s,name);
-			 */
-			// Ouverture du ficher 
-			FILE *input=NULL;
-			input=fopen("test.txt","r");
-			// Si tout c'est bien déroulé on va parser le fichier.
-			if(input!=NULL){
-				fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
-				array=Make2DintArray(sizeX,sizeY);
-				for (i = 0; i < sizeX; ++i)
-				{
-					for (j = 0; j < sizeY; ++j)
-					{
-						test = fgetc(input);
-						if(test != '\n' && test != '\r') // test pour retour a la ligne + espace
-							array[i][j] = test;
+		if(argc==1){
+			printf("test\n");
+				/*	
+					printf("Veuillez rentrer le nom du fichier sorurce à ouvrir\n");
+					scanf(%s,name);
+				 */
+				// Ouverture du ficher 
+				FILE *input=NULL;
+				input=fopen("lab1.txt","r");
+				// Si tout c'est bien déroulé on va parser le fichier.
+				if(input!=NULL){
+					fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
+					array=Make2DintArray(sizeX,sizeY);
+						for (i = 0; i < sizeX; ++i){
+							for (j = 0; j < sizeY; ++j){
+								test = fgetc(input);
+									if(test != '\n' && test != '\r') // test pour retour a la ligne + espace
+										array[i][j] = test;
 
-						else
-							j--;
-					}
-				}
+									else
+									j--;
+							}
+						}
 			AfficheTableau(sizeX,sizeY,array);
 			}
 
