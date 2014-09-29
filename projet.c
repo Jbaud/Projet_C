@@ -75,14 +75,13 @@ int main(int argc , char *argv[]){
 									j--;
 							}
 						}
+			printf("------------------Affichage des variables-------------------\n");
+			printf("sizeX:%d sizeY:%d, entreeX:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
 			AfficheTableau(sizeX,sizeY,array);
 			}
 
 		}	
 	}
-
-
-
-
+	free(array);
 	return 0;
 }
