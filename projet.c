@@ -53,42 +53,46 @@ int main(int argc , char *argv[]){
 		   Si aucun argument n'est fourni en entree -> fichier texte.
 		 */
 		if(argc==1){
-				/*	
-					printf("Veuillez rentrer le nom du fichier sorurce à ouvrir\n");
-					scanf(%s,name);
-				 */
-				// Ouverture du ficher 
-				FILE *input=NULL;
-				input=fopen("lab1.txt","r");
-				// Si tout c'est bien déroulé on va parser le fichier.
-				if(input!=NULL){
-					fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
-					array=Make2DintArray(sizeX,sizeY);
-							
-
-					 for(i = 0; i < sizeX; i++)
-					  {
-					      for(j = 0; j < sizeY; j++) 
-					      {
-					  //Use lf format specifier, %c is for character
-					       if (!fscanf(input, "%hu", &array[i][j])) 
-					           break;
-					      // mat[i][j] -= '0'; 
-					       printf("%hu\n",array[i][j]); //Use lf format specifier, \n is for new line
-					      }
-
-					  }
+			/*	
+				printf("Veuillez rentrer le nom du fichier sorurce à ouvrir\n");
+				scanf(%s,name);
+			 */
+			// Ouverture du ficher 
+			FILE *input=NULL;
+			input=fopen("lab1.txt","r");
+			// Si tout c'est bien déroulé on va parser le fichier.
+			if(input!=NULL){
+				fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
+				array=Make2DintArray(sizeX,sizeY);
 
 
+				for(i = 0; i < sizeX; i++)
+				{
+					for(j = 0; j < sizeY; j++) 
+					{
+						//Use lf format specifier, %c is for character
+						if (!fscanf(input, "%hu", &array[i][j])) 
+							break;
 
-			printf("------------------Affichage des variables-------------------\n");
-			printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
-			AfficheTableau(sizeX,sizeY,array);
+					}
+
+				}
+
+
+
+				printf("------------------Affichage des variables-------------------\n");
+				printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
+				AfficheTableau(sizeX,sizeY,array);
 			}
 
 		}	
 	}
 	// Pas bien fait a revoir
+	for (i = 0; i < sizeX; ++i)
+	{
+		free(array[i]);
+	}
+
 	free(array);
 	return 0;
 }
