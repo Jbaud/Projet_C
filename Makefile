@@ -1,6 +1,6 @@
-
 projet: projet.o
-	gcc -o hello hello.o main.o
-
+	gcc projet.o -o projet_baud_deman
 projet.o: projet.c projet.h
-	gcc -o projet.o -c projet.c -W -Wall -ansi -pedantic
+	gcc -c projet.c
+clean:
+	rm -rf *o hello

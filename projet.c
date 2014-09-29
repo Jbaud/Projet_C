@@ -33,7 +33,7 @@ int main(int argc , char *argv[]){
 	int sortieX;
 	int sortieY;
 	unsigned short int **array;
-	int i,j,test;
+	int i,j;
 
 	//  On récpère les options fornies si présentes
 	if (argc==7)
@@ -60,7 +60,7 @@ int main(int argc , char *argv[]){
 			// Ouverture du ficher 
 			FILE *input=NULL;
 			input=fopen("lab1.txt","r");
-			// Si tout c'est bien déroulé on va parser le fichier.
+			// Si tout c est bien déroulé on va parser le fichier.
 			if(input!=NULL){
 				fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
 				array=Make2DintArray(sizeX,sizeY);
