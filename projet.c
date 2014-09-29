@@ -53,7 +53,6 @@ int main(int argc , char *argv[]){
 		   Si aucun argument n'est fourni en entree -> fichier texte.
 		 */
 		if(argc==1){
-			printf("test\n");
 				/*	
 					printf("Veuillez rentrer le nom du fichier sorurce à ouvrir\n");
 					scanf(%s,name);
@@ -65,23 +64,31 @@ int main(int argc , char *argv[]){
 				if(input!=NULL){
 					fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
 					array=Make2DintArray(sizeX,sizeY);
-						for (i = 0; i < sizeX; ++i){
-							for (j = 0; j < sizeY; ++j){
-								test = fgetc(input);
-									if(test != '\n' && test != '\r') // test pour retour a la ligne + espace
-										array[i][j] = test;
+							
 
-									else
-									j--;
-							}
-						}
+					 for(i = 0; i < sizeX; i++)
+					  {
+					      for(j = 0; j < sizeY; j++) 
+					      {
+					  //Use lf format specifier, %c is for character
+					       if (!fscanf(input, "%hu", &array[i][j])) 
+					           break;
+					      // mat[i][j] -= '0'; 
+					       printf("%hu\n",array[i][j]); //Use lf format specifier, \n is for new line
+					      }
+
+					  }
+
+
+
 			printf("------------------Affichage des variables-------------------\n");
-			printf("sizeX:%d sizeY:%d, entreeX:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
+			printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
 			AfficheTableau(sizeX,sizeY,array);
 			}
 
 		}	
 	}
+	// Pas bien fait a revoir
 	free(array);
 	return 0;
 }
