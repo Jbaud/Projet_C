@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Cree un tableau 2D de unsigned short de la taille fournie par les entrees.
 unsigned short int** Make2DintArray(int sizeX, int sizeY) {
@@ -24,6 +25,15 @@ void AfficheTableau(int sizeX,int sizeY, unsigned short int  **array){
 	}
 }
 
+void getBinary(int num, char *str)
+{
+  *(str+4) = '\0';
+  int mask = 0x10 << 1;
+  while(mask >>= 1)
+    *str++ = !!(mask & num) + '0';
+}
+
+
 int main(int argc , char *argv[]){
 
 	int sizeX;
@@ -34,6 +44,8 @@ int main(int argc , char *argv[]){
 	int sortieY;
 	unsigned short int **array;
 	int i,j;
+	char name[10];
+	char string[5]; // sera utilisé pour la conversion binaire.
 
 	//  On récpère les options fornies si présentes
 	if (argc==7)
@@ -53,10 +65,9 @@ int main(int argc , char *argv[]){
 		   Si aucun argument n'est fourni en entree -> fichier texte.
 		 */
 		if(argc==1){
-			/*	
-				printf("Veuillez rentrer le nom du fichier sorurce à ouvrir\n");
-				scanf(%s,name);
-			 */
+		//	printf("Veuillez rentrer le nom du fichier sorurce à ouvrir\n");
+		//	scanf(%s,name);
+		
 			// Ouverture du ficher 
 			FILE *input=NULL;
 			input=fopen("lab1.txt","r");
@@ -64,8 +75,6 @@ int main(int argc , char *argv[]){
 			if(input!=NULL){
 				fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
 				array=Make2DintArray(sizeX,sizeY);
-
-
 				for(i = 0; i < sizeX; i++)
 				{
 					for(j = 0; j < sizeY; j++) 
@@ -77,13 +86,13 @@ int main(int argc , char *argv[]){
 					}
 
 				}
-
-
-
 				printf("------------------Affichage des variables-------------------\n");
 				printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
 				AfficheTableau(sizeX,sizeY,array);
-			}
+				printf("------------------Conversion binaire-------------------------\n");
+				getBinary(8, string);
+  				printf("%s\n", string);
+				}
 
 		}	
 	}

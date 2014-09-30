@@ -3,4 +3,6 @@ projet: projet.o
 projet.o: projet.c projet.h
 	gcc -c projet.c
 clean:
-	rm -rf *o hello
+	rm -rf *o
+start:
+	./projet_baud_deman
