@@ -62,6 +62,24 @@ void printCells_Binary(unsigned short int **board, int lines, int columns){ // p
 
 }
 
+void printBinary(unsigned short int value){ // affiche les 4 bits de poids faible de la valeur
+
+	unsigned short a= 0x1;
+	int i;
+
+	
+	printf("\n");
+	
+	for(i=3; i >= 0; i--){	// test bit à bit de gauche à droite
+	
+		a = (value >> i) & 1;
+		printf("%d", a);
+		
+	}
+	
+	printf("\n");
+	
+}
 
 int main(int argc , char *argv[]){
 
