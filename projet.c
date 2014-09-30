@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <SDL/SDL.h>
 
 // Cree un tableau 2D de unsigned short de la taille fournie par les entrees.
 unsigned short int** Make2DintArray(int sizeX, int sizeY) {
@@ -46,6 +47,7 @@ int main(int argc , char *argv[]){
 	int i,j;
 	char name[10];
 	char string[5]; // sera utilisé pour la conversion binaire.
+	int retour=0;
 
 	//  On récpère les options fornies si présentes
 	if (argc==7)
@@ -73,7 +75,13 @@ int main(int argc , char *argv[]){
 			input=fopen("lab1.txt","r");
 			// Si tout c est bien déroulé on va parser le fichier.
 			if(input!=NULL){
-				fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
+				retour=fscanf(input,"%d %d %d %d %d %d\n",&sizeX,&sizeY,&entreeX,&entreeY,&sortieX,&sortieY);
+				
+				if (retour)
+				{
+					printf("Données bien lues\n");
+				}
+
 				array=Make2DintArray(sizeX,sizeY);
 				for(i = 0; i < sizeX; i++)
 				{
@@ -90,13 +98,38 @@ int main(int argc , char *argv[]){
 				printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
 				AfficheTableau(sizeX,sizeY,array);
 				printf("------------------Conversion binaire-------------------------\n");
-				getBinary(8, string);
-  				printf("%s\n", string);
+				getBinary(13, string);
+  				printf("%.5s\n", string);
 				}
+/*
+****************************************** Initialisation SDL*************************************************************************
+*/
+			SDL_Surface *screen;
+		    if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
+		    {
+		        printf( "Can't init SDL:  %s\n", SDL_GetError( ) );
+		        return EXIT_FAILURE;
+		    }
 
+		    atexit( SDL_Quit ); 
+		    screen = SDL_SetVideoMode(500,500,16, SDL_HWSURFACE );
+		    SDL_WM_SetCaption("Labyrinthe Generator", NULL);
+
+
+		    // Fond d'écran en vert.
+		    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format,47,227,33));
+		    // Mise a jour de la couleur de l'écran.
+		    SDL_Flip(screen);
+
+		    if( screen == NULL )
+		    {
+		        printf( "Can't set video mode: %s\n", SDL_GetError( ) );
+		        return EXIT_FAILURE;
+		    }   
+
+		    SDL_Delay( 3000 );
 		}	
 	}
-	// Pas bien fait a revoir
 	for (i = 0; i < sizeX; ++i)
 	{
 		free(array[i]);
