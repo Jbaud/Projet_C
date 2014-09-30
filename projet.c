@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL/SDL.h>
+#include <math.h>
 
 // Cree un tableau 2D de unsigned short de la taille fournie par les entrees.
 unsigned short int** Make2DintArray(int sizeX, int sizeY) {
@@ -34,6 +35,33 @@ void getBinary(int num, char *str)
     *str++ = !!(mask & num) + '0';
 }
 
+void printCells_Binary(unsigned short int **board, int lines, int columns){ // print les 4 bits de poids faible de chaque valeur de cellule du tab
+
+	int i,j; 	// parcours lignes colones
+	int k;	// parcours bits
+	unsigned short a= 0x1; 	// masque pour tester les bits
+	
+	for(i=0; i < columns; i++){ 	// parcours tableau (colones)
+	
+		for(j=0; j < lines; j++){ 	// parcours tableau (lignes)
+		
+			for(k=3; k >= 0; k--){ 		// affichage des 4 bits
+			
+				a= (board[i][j] >> k) & 1;
+				printf("%d", a);
+			}
+			
+			printf("  ");
+		}
+		
+	printf("\n");
+	
+	}
+	
+	printf("\n");
+
+}
+
 
 int main(int argc , char *argv[]){
 
@@ -46,7 +74,6 @@ int main(int argc , char *argv[]){
 	unsigned short int **array;
 	int i,j;
 	char name[10];
-	char string[5]; // sera utilisé pour la conversion binaire.
 	int retour=0;
 
 	//  On récpère les options fornies si présentes
@@ -98,12 +125,24 @@ int main(int argc , char *argv[]){
 				printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
 				AfficheTableau(sizeX,sizeY,array);
 				printf("------------------Conversion binaire-------------------------\n");
-				getBinary(13, string);
-  				printf("%.5s\n", string);
+				printCells_Binary(array,sizeX,sizeY);
 				}
 /*
 ****************************************** Initialisation SDL*************************************************************************
 */
+			
+			/*
+			--------------Definition variables pour affichage-----------------------------
+			*/
+			int screenSizeX=500;
+			int screenSizeY=500;
+			/*
+			int tailleCarresX=0;
+			int tailleCarresY=0;
+			int nombreCarresX=0;
+			int nombreCarresY=0;
+			*/
+			//----------------------------------------------------------------------------
 			SDL_Surface *screen;
 		    if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
 		    {
@@ -112,12 +151,11 @@ int main(int argc , char *argv[]){
 		    }
 
 		    atexit( SDL_Quit ); 
-		    screen = SDL_SetVideoMode(500,500,16, SDL_HWSURFACE );
+		    screen = SDL_SetVideoMode(screenSizeX,screenSizeY,16, SDL_HWSURFACE );
 		    SDL_WM_SetCaption("Labyrinthe Generator", NULL);
 
 
-		    // Fond d'écran en vert.
-		    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format,47,227,33));
+		    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format,46,140,34));
 		    // Mise a jour de la couleur de l'écran.
 		    SDL_Flip(screen);
 
@@ -126,8 +164,9 @@ int main(int argc , char *argv[]){
 		        printf( "Can't set video mode: %s\n", SDL_GetError( ) );
 		        return EXIT_FAILURE;
 		    }   
+		 
 
-		    SDL_Delay( 3000 );
+		    SDL_Delay( 10000 );
 		}	
 	}
 	for (i = 0; i < sizeX; ++i)
