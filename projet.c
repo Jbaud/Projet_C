@@ -80,6 +80,25 @@ void printBinary(unsigned short int value){ // affiche les 4 bits de poids faibl
 	printf("\n");
 	
 }
+unsigned short int ** parcours(unsigned short int ** array, int entreeX, int entreeY,int sortieX , int sortieY){
+
+int finie=0;
+
+// On ne connait pas le nom d'étapes
+while(!finie){
+	// le point de départ du programme.
+	
+	/*
+	On va selectionner les 4 derniers bits de la cellule actuelle 
+		-envoyer le tableau contenant les 4 murs sur les 4 fonctions de test 
+		partir dans l'ordre (droite bas gauche haut) dans la case selectionnée apres avoir muré le mur en question.
+		Boucler
+		Puis recommencer l'opération . verifier le nb de murs ouverts. Etc...
+
+	*/
+}
+
+}
 
 int main(int argc , char *argv[]){
 
