@@ -26,15 +26,6 @@ void AfficheTableau(int sizeX,int sizeY, unsigned short int  **array){
 		printf("\n");
 	}
 }
-
-void getBinary(int num, char *str)
-{
-  *(str+4) = '\0';
-  int mask = 0x10 << 1;
-  while(mask >>= 1)
-    *str++ = !!(mask & num) + '0';
-}
-
 void printCells_Binary(unsigned short int **board, int lines, int columns){ // print les 4 bits de poids faible de chaque valeur de cellule du tab
 
 	int i,j; 	// parcours lignes colones
@@ -61,27 +52,7 @@ void printCells_Binary(unsigned short int **board, int lines, int columns){ // p
 	printf("\n");
 
 }
-
-void printBinary(unsigned short int value){ // affiche les 4 bits de poids faible de la valeur
-
-	unsigned short a= 0x1;
-	int i;
-
-	
-	printf("\n");
-	
-	for(i=3; i >= 0; i--){	// test bit à bit de gauche à droite
-	
-		a = (value >> i) & 1;
-		printf("%d", a);
-		
-	}
-	
-	printf("\n");
-	
-}
 unsigned short int ** parcours(unsigned short int ** array, int entreeX, int entreeY,int sortieX , int sortieY){
-
 int finie=0;
 
 // On ne connait pas le nom d'étapes
@@ -94,6 +65,11 @@ while(!finie){
 		partir dans l'ordre (droite bas gauche haut) dans la case selectionnée apres avoir muré le mur en question.
 		Boucler
 		Puis recommencer l'opération . verifier le nb de murs ouverts. Etc...
+
+		Fonctions a faire
+		-modifier binary pour retourner tableau des 4 bits pour les murs
+		-4 fonctions de test pour chaque bit (droite bas gauche haut)
+		- Fonction qui rajoute un mur sur le bit selectionné dans le tableau selectionnée ( et dans le secondaire des 4 bits)
 
 	*/
 }
@@ -112,6 +88,7 @@ int main(int argc , char *argv[]){
 	int i,j;
 	char name[10];
 	int retour=0;
+	char test[5];
 
 	//  On récpère les options fornies si présentes
 	if (argc==7)
