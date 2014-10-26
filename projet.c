@@ -52,6 +52,55 @@ void printCells_Binary(unsigned short int **board, int lines, int columns){ // p
 	printf("\n");
 
 }
+
+void print_labyrinthe(unsigned short **board, int lines, int columns){ // affiche le tableau dans le terminal
+
+	int i,j; // variables de parcours
+	int cycle=2; // si = 1 on affiche les murs gauche/droite sur la ligne; si = 2 on affiche les murs hauts/bas
+	unsigned short d= 0x4, b= 0x2; // masques
+	unsigned short temp;
+
+	printf(".");
+	
+	for(i=0; i < lines; i++) // affichage de la première ligne (cadre)
+		printf("....");
+
+	for(i=0; i < columns; i++){ // parcours colonnes
+
+		if(cycle == 1){
+			cycle= 2; // on switch sur l'affichage des murs bas/haut
+			printf("\n.");
+		}
+		else{
+			cycle= 1; // on switch sur l'affichage des murs gauche/droite
+			printf("\n|");
+		}
+			
+			
+		for(j=0; j < lines; j++){ // parcours lignes
+			
+			if(cycle == 1){
+				temp= board[i][j] & d;
+				if(temp == d)
+					printf("   |"); // mettre un mur a droite
+				else
+					printf("    ");
+			}
+				
+			if(cycle ==2){
+				
+				temp= board[i-1][j] & b;
+				if(temp == b)
+					printf("...."); // mettre un mur en bas
+				else
+					printf("    ");
+			}		
+		}		
+	}
+	printf("\n\n");
+
+}
+
 unsigned short int ** parcours(unsigned short int ** array, int entreeX, int entreeY,int sortieX , int sortieY){
 int finie=0;
 
