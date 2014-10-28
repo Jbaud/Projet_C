@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <SDL/SDL.h>
+//#include <SDL/SDL.h>
 #include <math.h>
 
 // Cree un tableau 2D de unsigned short de la taille fournie par les entrees.
@@ -101,6 +101,86 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 
 }
 
+/*unsigned short** Generate_Random_Lab(int lines, int columns){ // genere un labyrinthe aleatoire de taille fixee
+
+	int i,j; // variables de parcours tableau
+	unsigned short aleatoire = 0; // prend la valeur de 0 ou 1
+	unsigned short h,b,g,d; // masques pour les murs du cadre 
+	
+	unsigned short **board;
+
+
+	//********************************* MALLOC TABLEAU 2D *****************************************************************
+
+	board= (unsigned short**)malloc(sizeof(unsigned short*)*columns);
+	
+	if(!board){ // verifie sil'allocation s'est bien passee, eteint le programme si non
+		printf("erreur lors de l'allocation du tableau random (**)"); exit(-1);;
+	}
+
+
+	for(i=0; i < columns; i++){ // malloc pour generer le tab de pointeurs
+	
+		board[i]= (unsigned short*)malloc(sizeof(unsigned short)*lines);
+		
+		if(!board[i]){
+
+			printf("erreur lors de l'allocation du taleau random (*)"); exit(-1);
+		}
+	}
+
+	//************************************** FIN MALLOC *******************************************************************
+
+
+	for(i=0; i < columns; i++){ // initialisation du tableau a 0 (necessaire)
+		
+		for(j=0; j < lines; j++)
+			board[i][j]= 0;
+	}
+
+
+	for(i=0; i < columns; i++){ // determination des valeurs / murs
+
+		for(j=0; j < lines; j++){
+
+			// mettre un mur en bas aleatoirement
+			aleatoire = rand() % 2;
+			aleatoire << 1;
+			board[i][j] = aleatoire | (board[i][j]);
+			// mettre un mur a droite aleatoirement
+			aleatoire = rand() % 2;
+			aleatoire << 2;
+			board[i][j] = aleatoire | (board[i][j]);
+
+			// murs pour les contours (le cadre du labyrinthe)
+			if(i==0){
+				h= 0x1;
+				h << 3;
+				board[i][j] |= h;
+			}
+
+			if(i == columns-1)
+				b=0x1;
+				b << 1;
+				board[i] |= b;
+
+			if(j == 0){
+				g= 0x1;
+				g << 2;
+				board[i][j] |= g; 
+			}
+		
+			if(j == lines-1){
+				d= 0x1;
+				board[i][j] |= d;
+			}			
+		}
+	}
+		
+	return **board;
+}
+*/
+
 unsigned short int ** parcours(unsigned short int ** array, int entreeX, int entreeY,int sortieX , int sortieY){
 int finie=0;
 
@@ -192,19 +272,19 @@ int main(int argc , char *argv[]){
 				}
 /*
 ****************************************** Initialisation SDL*************************************************************************
-*/
+
 			
-			/*
+			
 			--------------Definition variables pour affichage-----------------------------
-			*/
+			
 			int screenSizeX=500;
 			int screenSizeY=500;
-			/*
+			
 			int tailleCarresX=0;
 			int tailleCarresY=0;
 			int nombreCarresX=0;
 			int nombreCarresY=0;
-			*/
+			
 			//----------------------------------------------------------------------------
 			SDL_Surface *screen;
 		    if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
@@ -229,7 +309,7 @@ int main(int argc , char *argv[]){
 		    }   
 		 
 
-		    SDL_Delay( 10000 );
+		    SDL_Delay( 10000 );*/
 		}	
 	}
 	for (i = 0; i < sizeX; ++i)
