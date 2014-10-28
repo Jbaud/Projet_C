@@ -181,9 +181,9 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 }
 */
 
-unsigned short int ** parcours(unsigned short int ** array, int entreeX, int entreeY,int sortieX , int sortieY){
+/*unsigned short int ** parcours(unsigned short int ** array, int entreeX, int entreeY,int sortieX , int sortieY){
 int finie=0;
-
+*/
 // On ne connait pas le nom d'étapes
 while(!finie){
 	// le point de départ du programme.
