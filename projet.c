@@ -95,6 +95,7 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 
 }
 
+// PAS ENCORE TESTE //
 unsigned short** Generate_Random_Lab(int lines, int columns){ // genere un labyrinthe aleatoire de taille fixee
 
 	int i,j; // variables de parcours tableau
