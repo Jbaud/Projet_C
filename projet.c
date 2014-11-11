@@ -3,6 +3,7 @@
 #include <string.h>
 //#include <SDL/SDL.h>
 #include <math.h>
+#include <time.h>
 
 // Cree un tableau 2D de unsigned short de la taille fournie par les entrees.
 unsigned short int** Make2DintArray(int sizeX, int sizeY) {
@@ -26,6 +27,7 @@ void AfficheTableau(int sizeX,int sizeY, unsigned short int  **array){
 		printf("\n");
 	}
 }
+
 void printCells_Binary(unsigned short int **board, int lines, int columns){ // print les 4 bits de poids faible de chaque valeur de cellule du tab
 
 	int i,j; 	// parcours lignes colones
@@ -56,7 +58,6 @@ void printCells_Binary(unsigned short int **board, int lines, int columns){ // p
 void print_labyrinthe(unsigned short **board, int lines, int columns){ // affiche le tableau dans le terminal
 
 	int i,j; // variables de parcours
-	int cycle=2; // si = 1 on affiche les murs gauche/droite sur la ligne; si = 2 on affiche les murs hauts/bas
 	unsigned short d= 0x4, b= 0x2; // masques
 	unsigned short temp;
 
@@ -65,43 +66,36 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 	for(i=0; i < lines; i++) // affichage de la première ligne (cadre)
 		printf("....");
 
-	for(i=0; i < columns; i++){ // parcours colonnes
+	for(j=0; j < columns; j++){ // parcours colonnes			
 
-		if(cycle == 1){
-			cycle= 2; // on switch sur l'affichage des murs bas/haut
-			printf("\n.");
+		printf("\n|");		
+	
+		for(i=0; i < lines; i++){ // parcours lignes
+			
+			temp= board[j][i] & d;
+			if(temp == d)
+				printf("   |"); // mettre un mur a droite
+			else
+			 	printf("    ");
 		}
-		else{
-			cycle= 1; // on switch sur l'affichage des murs gauche/droite
-			printf("\n|");
-		}
+
+		printf("\n.");
 			
-			
-		for(j=0; j < lines; j++){ // parcours lignes
-			
-			if(cycle == 1){
-				temp= board[i][j] & d;
-				if(temp == d)
-					printf("   |"); // mettre un mur a droite
-				else
-					printf("    ");
-			}
+		for(i=0; i < lines; i++){
 				
-			if(cycle ==2){
-				
-				temp= board[i-1][j] & b;
-				if(temp == b)
-					printf("...."); // mettre un mur en bas
-				else
-					printf("    ");
-			}		
+			temp= board[j][i] & b;
+			if(temp == b)
+				printf("...."); // mettre un mur en bas
+			else
+				printf("    ");	
 		}		
 	}
+	
 	printf("\n\n");
 
 }
 
-/*unsigned short** Generate_Random_Lab(int lines, int columns){ // genere un labyrinthe aleatoire de taille fixee
+unsigned short** Generate_Random_Lab(int lines, int columns){ // genere un labyrinthe aleatoire de taille fixee
 
 	int i,j; // variables de parcours tableau
 	unsigned short aleatoire = 0; // prend la valeur de 0 ou 1
@@ -162,7 +156,7 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 			if(i == columns-1)
 				b=0x1;
 				b << 1;
-				board[i] |= b;
+				board[i][j] |= b;
 
 			if(j == 0){
 				g= 0x1;
@@ -177,32 +171,7 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 		}
 	}
 		
-	return **board;
-}
-*/
-
-/*unsigned short int ** parcours(unsigned short int ** array, int entreeX, int entreeY,int sortieX , int sortieY){
-int finie=0;
-*/
-// On ne connait pas le nom d'étapes
-while(!finie){
-	// le point de départ du programme.
-	
-	/*
-	On va selectionner les 4 derniers bits de la cellule actuelle 
-		-envoyer le tableau contenant les 4 murs sur les 4 fonctions de test 
-		partir dans l'ordre (droite bas gauche haut) dans la case selectionnée apres avoir muré le mur en question.
-		Boucler
-		Puis recommencer l'opération . verifier le nb de murs ouverts. Etc...
-
-		Fonctions a faire
-		-modifier binary pour retourner tableau des 4 bits pour les murs
-		-4 fonctions de test pour chaque bit (droite bas gauche haut)
-		- Fonction qui rajoute un mur sur le bit selectionné dans le tableau selectionnée ( et dans le secondaire des 4 bits)
-
-	*/
-}
-
+	return board;
 }
 
 int main(int argc , char *argv[]){
@@ -217,7 +186,6 @@ int main(int argc , char *argv[]){
 	int i,j;
 	char name[10];
 	int retour=0;
-	char test[5];
 
 	//  On récpère les options fornies si présentes
 	if (argc==7)
@@ -266,50 +234,13 @@ int main(int argc , char *argv[]){
 				}
 				printf("------------------Affichage des variables-------------------\n");
 				printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
-				AfficheTableau(sizeX,sizeY,array);
+				printf("affichage du tableau\n");
+				print_labyrinthe(array,sizeX,sizeY);
+				printf("\n");
 				printf("------------------Conversion binaire-------------------------\n");
 				printCells_Binary(array,sizeX,sizeY);
 				}
-/*
-****************************************** Initialisation SDL*************************************************************************
 
-			
-			
-			--------------Definition variables pour affichage-----------------------------
-			
-			int screenSizeX=500;
-			int screenSizeY=500;
-			
-			int tailleCarresX=0;
-			int tailleCarresY=0;
-			int nombreCarresX=0;
-			int nombreCarresY=0;
-			
-			//----------------------------------------------------------------------------
-			SDL_Surface *screen;
-		    if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
-		    {
-		        printf( "Can't init SDL:  %s\n", SDL_GetError( ) );
-		        return EXIT_FAILURE;
-		    }
-
-		    atexit( SDL_Quit ); 
-		    screen = SDL_SetVideoMode(screenSizeX,screenSizeY,16, SDL_HWSURFACE );
-		    SDL_WM_SetCaption("Labyrinthe Generator", NULL);
-
-
-		    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format,46,140,34));
-		    // Mise a jour de la couleur de l'écran.
-		    SDL_Flip(screen);
-
-		    if( screen == NULL )
-		    {
-		        printf( "Can't set video mode: %s\n", SDL_GetError( ) );
-		        return EXIT_FAILURE;
-		    }   
-		 
-
-		    SDL_Delay( 10000 );*/
 		}	
 	}
 	for (i = 0; i < sizeX; ++i)
