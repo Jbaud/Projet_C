@@ -104,6 +104,7 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 // x et y représentent le point d'entre du labyrinthe.
 //value servira a propager notre position acutelle dans le tableau path
 void solver(unsigned short **board, int lines, int columns, int x, int y, unsigned short int **path,int value ,int sortieX,int sortieY){
+	int i,j;
 	// Condition d'arret => sortie trouvée
 	if (x==sortieX && y==sortieY)
 	{
@@ -134,22 +135,22 @@ void solver(unsigned short **board, int lines, int columns, int x, int y, unsign
 		// on crée un mur a droite
 		printf("On entre a droite\n");
 		board[x][y+1]=board[x][y+1] & 0x4;
-		solver(board,lines,columns,x,y+1,path,value,sortieX,sortieY);
+		solver(board,lines,columns,x,y+1,path,value+1,sortieX,sortieY);
 	}
 	if(gauche(board[x][y]) && y>= 1){
 		printf("on entre a gauche\n");
 		board[x][y-1]=board[x][y-1] & 0x1;
-		solver(board,lines,columns,x,y-1,path,value,sortieX,sortieY);
+		solver(board,lines,columns,x,y-1,path,value+1,sortieX,sortieY);
 	}
 	if(haut(board[x][y]) && x>= 1){
 		printf("on entre en haut\n");
 		board[x-1][y]=board[x-1][y] & 0x8;
-		solver(board,lines,columns,x-1,y,path,value,sortieX,sortieY);
+		solver(board,lines,columns,x-1,y,path,value+1,sortieX,sortieY);
 	}
 	if(bas(board[x][y]) && x< lines){
 		printf("on entre en bas\n");
 		board[x+1][y]=board[x+1][y] & 0x2;
-		solver(board,lines,columns,x+1,y,path,value,sortieX,sortieY);
+		solver(board,lines,columns,x+1,y,path,value+1,sortieX,sortieY);
 	}
 }
 // PAS ENCORE TESTE //
@@ -305,10 +306,11 @@ int main(int argc , char *argv[]){
 		   		printCells_Binary(array,sizeX,sizeY);
 		   		printf("Test du parcours de tableau\n");
 			//  solver(unsigned short **board, int lines, int columns, int x, int y, int **path,int value ,int sortieX,int sortieY)
-		   		//solver(array, sizeX, sizeY, entreeX, entreeY, path, value , sortieX, sortieY);
-		   		int test;
+		   		solver(array, sizeX, sizeY, 8, 4, path, value , sortieX, sortieY);
+		   		/*int test;
 		   		test=gauche(array[entreeX][entreeY]);
 		   		printf("%d\n",test);
+		   		*/
 		   	}	
 		   }
 		   for (i = 0; i < sizeX; ++i)
