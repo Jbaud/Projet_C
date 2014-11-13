@@ -6,10 +6,11 @@
 
 // Ces fonctions permettent de tester la présence de mur
 // retourne 1 si présent sur le bit 0 sinon
-#define droite(x) ((x) & 0x4 ? (1) : ((0)))
-#define   haut(x) ((x) & 0x8 ? (1) : ((0)))
-#define gauche(x) ((x) & 0x1 ? (1) : ((0)))
-#define    bas(x) ((x) & 0x2 ? (1) : ((0)))
+
+#define droite(x) ((x) & 0x4 ? (1) : (0) )
+#define   haut(x) ((x) & 0x8 ? (1) : (0) )
+#define gauche(x) ((x) & 0x1 ? (1) : (0) )
+#define    bas(x) ((x) & 0x2 ? (1) : (0) )
 
 // Cree un tableau 2D de unsigned short de la taille fournie par les entrees.
 unsigned short int** Make2DintArray(int sizeX, int sizeY) {
@@ -61,8 +62,8 @@ void printCells_Binary(unsigned short int **board, int lines, int columns){ // p
 
 }
 
-void print_labyrinthe(unsigned short **board, int lines, int columns){ // affiche le tableau dans le terminal
-
+void print_current_position(unsigned short **board,int lines, int columns, unsigned short startx, unsigned short int starty){
+	
 	int i,j; // variables de parcours
 	unsigned short d= 0x4, b= 0x2; // masques
 	unsigned short temp;
@@ -79,10 +80,17 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 		for(i=0; i < lines; i++){ // parcours lignes
 			
 			temp= board[j][i] & d;
-			if(temp == d)
-				printf("   |"); // mettre un mur a droite
+
+			if((startx == i && starty == j) && temp ==d)
+				printf(" + |");
+
+			else if(startx ==i && starty ==j)
+				printf(" +  ");
+			
+			else if(temp == d)
+				printf(" o |"); // mettre un mur a droite
 			else
-				printf("    ");
+				printf(" o  ");
 		}
 
 		printf("\n.");
@@ -98,14 +106,17 @@ void print_labyrinthe(unsigned short **board, int lines, int columns){ // affich
 	}
 	
 	printf("\n\n");
-
 }
 // Cette fonction va résoudre le labyrinthe de manière récursive
 // x et y représentent le point d'entre du labyrinthe.
 //value servira a propager notre position acutelle dans le tableau path
-void solver(unsigned short **board, int lines, int columns, int x, int y, unsigned short int **path,int value ,int sortieX,int sortieY){
+void solver(unsigned short **board, int lines, int columns, int y, int x, unsigned short int **path,int value ,int sortieX,int sortieY){
 	int i,j;
+	int temp;
 	// Condition d'arret => sortie trouvée
+	
+	// TESTE
+	printf("Valeur en int de la position actuelle: %d\n",board[x][y]);
 	if (x==sortieX && y==sortieY)
 	{
 		printf("Le chemin à été trouvé \n");
@@ -113,9 +124,17 @@ void solver(unsigned short **board, int lines, int columns, int x, int y, unsign
 		path[1][value]=y;
 		return;
 	}
+	
+	
+	printf("droite: %d et %d\n",droite(board[x][y]),board[x][y]);
+	printf("haut: %d et %d\n",haut(board[x][y]),board[x][y]);
+	printf("gauche: %d et %d\n",gauche(board[x][y]),board[x][y]);
+	printf("bas: %d et %d\n",bas(board[x][y]),board[x][y]);
+	
 	// Condition d'arret => pas de sortie
-	if(droite(board[x][y]) && gauche(board[x][y]) && haut(board[x][y]) && bas(board[x][y])){
-		printf("La condition d'arret a été rencontrée\n");
+	if( droite(board[x][y]) &&  gauche(board[x][y]) && haut(board[x][y]) && bas(board[x][y]) ){
+		printf("La condition d'arret a été rencontrée - aucun chemin a partir de cette case \n");
+		// on efface le tableau pour ne pas avoir de faussses donnees -> il va y avoir un pb plus tard
 		for (i = 0; i < 2; ++i)
 		{
 			for (j = 0; i < 20; ++j)
@@ -123,35 +142,44 @@ void solver(unsigned short **board, int lines, int columns, int x, int y, unsign
 				path[i][j]=0;
 			}
 		}
+		printf("blallz\n");
 		return;
 	}
 
 	// on insere dans le tabeau des chemins la postion  actuelle.
-	path[0][value]=x;
-	path[1][value]=y;
+	path[0][value]=y;
+	path[1][value]=x;
+
+	printf("test valeur de board[x][y+1]=%d et resultat: %d\n",board[x][y+1],board[x][y+1] | 0x1);
 
 	// la fonction va tester les murs ouverts puis rentrer dans le premier disponible
-	if(droite(board[x][y]) && y< columns){
+	if( ( droite(board[x][y]) == 0) &&   y != columns -1){
 		// on crée un mur a droite
 		printf("On entre a droite\n");
-		board[x][y+1]=board[x][y+1] & 0x4;
-		solver(board,lines,columns,x,y+1,path,value+1,sortieX,sortieY);
+		// On cree a mur a droite => donc a gauche de la cellule de droite.
+		board[x][y+1]=(board[x][y+1] & ~1) | 1; // set the last bit to 001;
+		print_current_position(board,lines,columns,y+1,x);
+		solver(board,lines,columns,y+1,x,path,value+1,sortieX,sortieY);
 	}
-	if(gauche(board[x][y]) && y>= 1){
+	if( (gauche(board[x][y]) == 0 ) && y!= 0){
 		printf("on entre a gauche\n");
-		board[x][y-1]=board[x][y-1] & 0x1;
-		solver(board,lines,columns,x,y-1,path,value+1,sortieX,sortieY);
+		board[x][y-1]=( board[x][y-1] & ~4) | 1;
+		print_current_position(board,lines,columns,y-1,x);
+		solver(board,lines,columns,y-1,x,path,value+1,sortieX,sortieY);
 	}
-	if(haut(board[x][y]) && x>= 1){
+	if( ( haut(board[x][y])==0) && x!= 0){
 		printf("on entre en haut\n");
-		board[x-1][y]=board[x-1][y] & 0x8;
-		solver(board,lines,columns,x-1,y,path,value+1,sortieX,sortieY);
+		board[x-1][y]=( board[x-1][y] & ~2 ) | 1;
+		print_current_position(board,lines,columns,y,x-1);
+		solver(board,lines,columns,y,x-1,path,value+1,sortieX,sortieY);
 	}
-	if(bas(board[x][y]) && x< lines){
+	if( (bas(board[x][y])==0) && x != lines-1){
 		printf("on entre en bas\n");
-		board[x+1][y]=board[x+1][y] & 0x2;
-		solver(board,lines,columns,x+1,y,path,value+1,sortieX,sortieY);
+		board[x+1][y]=( board[x+1][y]  & ~8) | 1;
+		print_current_position(board,lines,columns,y,x+1);
+		solver(board,lines,columns,y,x+1,path,value+1,sortieX,sortieY);
 	}
+	printf("Probleme\n");
 }
 // PAS ENCORE TESTE //
 unsigned short** Generate_Random_Lab(int lines, int columns){ // genere un labyrinthe aleatoire de taille fixee
@@ -300,13 +328,15 @@ int main(int argc , char *argv[]){
 		   		printf("------------------Affichage des variables-------------------\n");
 		   		printf("sizeX:%d sizeY:%d, entreeX:%d,entreY:%d,sortieX:%d,sortieY:%d\n",sizeX,sizeY,entreeX,entreeY,sortieX,sortieY);
 		   		printf("affichage du tableau\n");
-		   		print_labyrinthe(array,sizeX,sizeY);
+		   		//print_labyrinthe(array,sizeX,sizeY);
 		   		printf("\n");
 		   		printf("------------------Conversion binaire-------------------------\n");
 		   		printCells_Binary(array,sizeX,sizeY);
+		   		printf("Affichage de la position de départ\n");
+		   		print_current_position(array,sizeX,sizeY,0,0);
 		   		printf("Test du parcours de tableau\n");
 			//  solver(unsigned short **board, int lines, int columns, int x, int y, int **path,int value ,int sortieX,int sortieY)
-		   		solver(array, sizeX, sizeY, 8, 4, path, value , sortieX, sortieY);
+		   		solver(array, sizeX, sizeY, 0, 0,path,value ,sortieX, sortieY);
 		   		/*int test;
 		   		test=gauche(array[entreeX][entreeY]);
 		   		printf("%d\n",test);
@@ -321,4 +351,4 @@ int main(int argc , char *argv[]){
 		   free(array);
 		   return 0;
 		}
-}
+	}
